@@ -1,0 +1,10 @@
+{
+    "python.defaultInterpreterPath": "C:\\Users\\amans\\anaconda3\\envs\\DL_AI_env_311\\python.exe",
+    "jupyter.defaultKernel": "deepmind",
+    "python.terminal.activateEnvironment": true,
+    "files.exclude": {
+        "**/.git": true,
+        "**/.ipynb_checkpoints": true,
+        "**/__pycache__": true
+    }
+}
