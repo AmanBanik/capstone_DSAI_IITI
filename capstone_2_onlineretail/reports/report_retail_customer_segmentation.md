@@ -1,8 +1,8 @@
 <div align="center">
 
-# Capstone Project 2: Online Retail Customer Purchasing Patterns & RFM Segmentation
+# Capstone Project 2: Online Retail Customer Purchasing Patterns & RFM Customer Segmentation
 
-### *An Unsupervised Machine Learning Framework for Behavioral Persona Discovery & Customer Value Optimization*
+### *An Unsupervised Machine Learning Framework for Behavioral Persona Discovery & Commercial Value Optimization*
 
 ---
 
@@ -15,13 +15,12 @@
 
 </div>
 
-### Executive Abstract
-This report presents an end-to-end, publication-grade customer analytics and unsupervised machine learning architecture developed for an international online retail enterprise based in the United Kingdom. Operating across 38 global markets with a diverse catalog of giftware and novelty merchandise, the enterprise faced critical challenges in understanding customer purchasing heterogeneity, mitigating customer churn, and personalizing retention marketing. Analyzing 541,909 raw transaction records spanning December 1, 2010 to December 9, 2011, we implement a rigorous data hygiene protocol (eliminating 5,268 duplicates, isolating 9,288 cancellations, and pruning 135,080 unauthenticated guest checkouts) to extract 392,692 verified customer purchase records across 4,338 unique commercial accounts. 
+### Executive Summary
+This report presents an industrial-grade customer analytics and unsupervised machine learning segmentation architecture for an international UK-based digital retail enterprise operating across 38 global markets. Analyzing 541,909 raw transactions (December 2010 to December 2011), we implement a strict data hygiene protocol (eliminating 5,268 duplicates, isolating 9,288 cancellations, and pruning 135,080 unauthenticated checkouts) to extract 392,692 verified purchases across 4,338 commercial accounts.
 
-We construct an empirical **Recency, Frequency, Monetary, and Average Order Value (RFM-AOV)** behavioral matrix. To address extreme right-skewness in transaction frequency (+12.07) and dollar spend (+19.32), we apply logarithmic transformations ($\log(1+x)$) and standard scaling, followed by Principal Component Analysis (PCA), which captures **93.87% of cumulative behavioral variance** in two orthogonal dimensions. We benchmark candidate clustering architectures (**K-Means**, **Agglomerative Hierarchical Clustering**, and **DBSCAN**) across $k \in [2, 6]$ using Inertia Elbow diagnostics, the Silhouette Coefficient, and the Davies-Bouldin Index. Our champion $k=4$ K-Means model partitions the customer base into four actionable personas: **Champions / Whales** (16.34% headcount, 64.72% revenue), **Loyal Active Repeaters** (27.04% headcount, 23.82% revenue), **Promising Recent Shoppers** (19.34% headcount, 5.13% revenue), and **Lost / Churned Inactive** (37.28% headcount, 6.33% revenue). Crucially, the model verifies a severe Pareto concentration: **43.38% of customers generate 88.54% of company revenue ($7.87M of $8.89M)**. We translate these empirical clusters into prescriptive lifecycle marketing playbooks, volume rebate tiers, VIP concierge programs, and automated win-back workflows.
+We engineer customer-level **Recency, Frequency, Monetary, and Average Order Value (RFM-AOV)** features. Monotonic logarithmic transformations ($\log(1+x)$) neutralize extreme power-law right-skewness (Frequency: +12.07 $ightarrow$ +1.21; Monetary: +19.32 $ightarrow$ +0.39), followed by standard scaling and Principal Component Analysis (PCA) capturing **93.87% of behavioral variance** in two orthogonal dimensions. Benchmarking K-Means, Agglomerative Hierarchical, and DBSCAN algorithms across $k \in [2, 6]$, our champion $k=4$ K-Means model discovers four distinct commercial personas: **Champions / Whales** (16.34% headcount, 64.72% revenue), **Loyal Active Repeaters** (27.04% headcount, 23.82% revenue), **Promising Recent Shoppers** (19.34% headcount, 5.13% revenue), and **Lost / Churned Inactive** (37.28% headcount, 6.33% revenue). The findings establish mathematical proof of the Pareto Principle: **43.38% of customers drive 88.54% of gross enterprise revenue (£7.87M of £8.89M)**. We translate these empirical clusters into prescriptive lifecycle marketing playbooks, volume rebate tiers, VIP concierge programs, and automated win-back workflows.
 
 
-\newpage
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
@@ -29,27 +28,24 @@ We construct an empirical **Recency, Frequency, Monetary, and Average Order Valu
 
 ---
 
-| Section Number | Section Title | Primary Focus & Deliverables |
-| :--- | :--- | :--- |
-| **Section 1** | **Problem Statement** | E-commerce customer heterogeneity, churn dynamics, retention vs. acquisition |
-| **Section 2** | **Project Objective** | RFM feature extraction, mathematical normalization, unsupervised segmentation |
-| **Section 3** | **Data Description** | 541,909 transaction panel, missing CustomerID analysis, price/quantity anomalies |
-| **Section 4** | **Data Pre-processing Steps and Inspiration** | Duplicate removal, cancellation isolation, log transformation, PCA projection |
-| **Section 5** | **Choosing the Algorithm for the Project** | Taxonomy of unsupervised algorithms: K-Means, Agglomerative, DBSCAN |
-| **Section 6** | **Motivation and Reasons For Choosing Algorithm** | Centroid geometry, dendrogram topological validation, scalability bounds |
-| **Section 7** | **Assumptions** | Log-normality stabilization, Euclidean distance validity, transaction independence |
-| **Section 8** | **Model Evaluation and Techniques** | Inertia Elbow curve, Silhouette analysis, Davies-Bouldin benchmark |
-| **Section 9** | **Inferences from the Same** | Four commercial personas, Pareto concentration (88.5%), marketing playbooks |
-| **Section 10** | **Future Possibilities of the Project** | Customer Lifetime Value (BG/NBD, Gamma-Gamma), Markov transitions, recommenders |
-| **Section 11** | **Conclusion** | Executive synthesis, marketing ROI reallocation, production deployment sign-off |
-| **Section 12** | **References** | Formal academic and industrial literature citations |
+1. **Problem Statement**: E-commerce customer heterogeneity, churn dynamics, and retention vs. acquisition trade-offs
+2. **Project Objective**: RFM feature extraction, mathematical normalization, and unsupervised segmentation mandates
+3. **Data Description**: 541,909 transaction panel, missing CustomerID analysis, price/quantity anomalies, product velocity
+4. **Data Pre-processing Steps and Inspiration**: Duplicate removal, cancellation isolation, log transformation, PCA projection
+5. **Choosing the Algorithm for the Project**: Taxonomy of unsupervised algorithms: K-Means, Agglomerative, DBSCAN
+6. **Motivation and Reasons For Choosing Algorithm**: Centroid geometry, dendrogram topological validation, scalability bounds
+7. **Assumptions**: Log-normality stabilization, Euclidean distance validity, and transaction independence
+8. **Model Evaluation and Techniques**: Inertia Elbow curve, Silhouette analysis, and Davies-Bouldin benchmark
+9. **Inferences from the Same**: Four commercial personas, Pareto concentration (88.5%), and marketing playbooks
+10. **Future Possibilities of the Project**: Customer Lifetime Value (BG/NBD, Gamma-Gamma), Markov transitions, recommenders
+11. **Conclusion**: Executive synthesis, marketing ROI reallocation, and production deployment sign-off
+12. **References**: Formal academic and industrial literature citations
 
 ---
 
 *Note: All sections in this report adhere strictly to the 12-section project report blueprint specified in `Draft.pdf` and `guideline.md`.*
 
 
-\newpage
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
@@ -77,7 +73,6 @@ To resolve these inefficiencies, the enterprise requires an objective, mathemati
 5. Establishing actionable commercial lifecycle playbooks to optimize marketing ROI and maximize long-term Customer Lifetime Value (CLV).
 
 
-\newpage
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
@@ -102,7 +97,6 @@ The primary objective of this Capstone project is to transition the enterprise f
 - **Cluster Actionability**: Deliver clusters that are commercially interpretable, non-degenerate (no singleton or vanishing groups), and directly actionable for marketing automation tools.
 
 
-\newpage
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
@@ -115,50 +109,65 @@ The analysis utilizes the transactional dataset `OnlineRetail.csv`, capturing al
 | :--- | :--- | :--- | :--- |
 | `InvoiceNo` | Object / String | 6-digit transaction identifier; codes starting with `'C'` denote cancellations | Identifies unique order boundaries and return status |
 | `StockCode` | Object / String | 5- or 6-character product SKU code | Tracks catalog inventory and product-level velocity |
-| `Description` | Object / String | Plain-text nominal description of the merchandise | Enables text analysis, catalog curation, and gift categorization |
+| `Description` | Object / String | Plain-text nominal description of the merchandise | Enables catalog curation and gift categorization |
 | `Quantity` | Integer | Units of merchandise purchased per line-item | Core transaction volume metric; negative values denote returns |
 | `InvoiceDate` | Datetime | Timestamp of transaction initiation | Enables temporal, hourly, daily, and recency analytics |
 | `UnitPrice` | Float | Unit price in Sterling (£) | Reflects product valuation and basket price elasticity |
 | `CustomerID` | Float | Unique 5-digit integer customer identifier | Fundamental entity key for customer-level aggregation |
 | `Country` | Object / String | Country of customer domicile | Defines domestic (UK) vs. international export markets |
 
-### 3.2 Data Completeness & Missing Value Diagnostics
-A rigorous null inspection revealed significant data sparsity in two critical fields:
-- `CustomerID`: Registers **135,080 missing values (24.93% of the total dataset)**. These records represent anonymous guest checkouts, one-time site visitors who did not authenticate, or unlinked web inquiries. Because customer segmentation requires tracking repeat behaviors across time, unauthenticated transactions cannot be assigned to customer entities and must be isolated.
-- `Description`: Registers **1,454 missing records (0.27%)**, primarily overlapping with administrative inventory adjustments or damaged goods entries. All other core fields (`InvoiceNo`, `Quantity`, `InvoiceDate`, `UnitPrice`, `Country`) exhibit 100% data completeness.
-
-### 3.3 Transactional Anomalies & Return Isolation
-Exploratory distribution analysis revealed severe operational anomalies:
-- `Quantity`: Ranges from **-80,995 to +80,995 units** (Mean: 9.55, Std: 218.08). The negative extremes reflect wholesale stock cancellations (e.g. Invoice `C581484`). Exactly **9,288 invoice line-items (1.71%)** represent cancellations.
-- `UnitPrice`: Displays values from **-£11,062.06 to +£38,970.00**. Extreme negatives represent accounting adjustments (such as bad debt write-offs via code `B`), while extreme positives represent administrative charges (Amazon seller fees, postage adjustments). Exactly 2,515 records have a £0.00 price, representing promotional free samples or warehouse corrections.
-
-![Product Revenue Velocity](../plots/01_top_products_revenue.png){width=85%}
-
-### 3.4 Product Velocity & Bestseller Dynamics
+### 3.2 Product Velocity & Bestseller Dynamics
 Aggregating gross revenue by product reveals distinct commercial behavior:
 - **Wholesale Bulk Outlier**: StockCode `23843` (`PAPER CRAFT , LITTLE BIRDIE`) generated the highest single-line revenue (**£168,469.60**) via a single massive transaction of 80,995 units by Customer `16446`.
 - **Core Retail Flagships**: StockCode `22423` (`REGENCY CAKESTAND 3 TIER`) is the top recurring retail revenue driver, generating **£142,264.75** across 1,703 distinct customer orders. Other anchor SKUs include `WHITE HANGING HEART T-LIGHT HOLDER` (£100,392.10 across 1,971 orders) and `JUMBO BAG RED RETROSPOT` (£85,040.54 across 1,600 orders).
 
-![Temporal Ordering Dynamics](../plots/02_temporal_order_patterns.png){width=85%}
+![Product Revenue Velocity](../plots/01_top_products_revenue.png){width=62%}
 
-### 3.5 Temporal Ordering Dynamics
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+### 3.3 Data Completeness & Missing Value Diagnostics
+A rigorous null inspection revealed significant data sparsity in two critical fields:
+- `CustomerID`: Registers **135,080 missing values (24.93% of total observations)**. These records represent anonymous guest checkouts or unlinked web inquiries. Because customer segmentation requires tracking repeat behaviors across time, unauthenticated transactions cannot be assigned to customer entities and must be isolated.
+- `Description`: Registers **1,454 missing records (0.27%)**, primarily overlapping with administrative inventory adjustments or damaged goods entries. All other core fields exhibit 100% data completeness.
+
+### 3.4 Temporal Purchasing Patterns
 - **Hour of Day**: Ordering activity follows a distinct daytime bell curve, beginning at 7:00 AM, peaking between **12:00 PM and 3:00 PM** (surpassing 3,000 invoices per peak hour), and tapering sharply after 5:00 PM.
 - **Day of Week**: **Thursday** registers the highest purchasing volume (~4,000 invoices), followed by Wednesday and Tuesday.
 - **Operational Artifact**: There are **zero recorded transactions on Saturdays**, indicating that the enterprise suspends order processing or digital checkouts on Saturdays for physical warehouse logistics and inventory consolidation.
 
-![Geographic Sales Distribution](../plots/03_country_sales_distribution.png){width=85%}
+![Temporal Ordering Dynamics](../plots/02_temporal_order_patterns.png){width=62%}
 
-### 3.6 Geographic Concentration
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+### 3.5 Geographic Concentration & Export Dynamics
 - **Domestic Dominance**: The United Kingdom generates **£7,285,024.64 (81.97% of total revenue)** and accounts for **3,920 out of 4,338 customers (90.36%)**.
 - **Key International Markets**: The Netherlands (£285.4K, 3.21%), EIRE (£265.3K, 2.98%), Germany (£228.7K, 2.57%), France (£208.9K, 2.35%), and Australia (£138.5K, 1.56%) represent the premier export markets. International customers display significantly higher Average Order Values (AOV), reflecting cross-border wholesale purchasing.
 
-![Monthly Revenue Trajectory](../plots/04_monthly_revenue_trend.png){width=85%}
+![Geographic Sales Distribution](../plots/03_country_sales_distribution.png){width=65%}
+
+- **Export Strategy**: International buyers exhibit bulk ordering tendencies, ordering less frequently but purchasing deeper unit volumes per checkout compared to domestic retail gifters.
+
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+### 3.6 Transactional Anomalies & Return Isolation
+Exploratory distribution analysis revealed severe operational anomalies:
+- `Quantity`: Ranges from **-80,995 to +80,995 units** (Mean: 9.55, Std: 218.08). The negative extremes reflect wholesale stock cancellations (e.g. Invoice `C581484`). Exactly **9,288 invoice line-items (1.71%)** represent cancellations.
+- `UnitPrice`: Displays values from **-£11,062.06 to +£38,970.00**. Extreme negatives represent accounting adjustments (such as bad debt write-offs via code `B`), while extreme positives represent administrative charges (Amazon seller fees, postage adjustments). Exactly 2,515 records have a £0.00 price, representing promotional free samples or warehouse corrections.
 
 ### 3.7 Annual Revenue Growth & Holiday Surge
-Monthly revenue exhibits dramatic seasonality. Sales remain stable at ~£500K-£650K per month through Q1-Q3 2011, before escalating sharply in Q4 to reach an annual peak of **£1,156,205.61 in November 2011** (+132% over baseline). This surge underscores the critical importance of holiday giftware purchasing in driving annual commercial solvency.
+Monthly revenue exhibits dramatic seasonality. Sales remain stable at ~£500K-£650K per month through Q1-Q3 2011, before escalating sharply in Q4 to reach an annual peak of **£1,156,205.61 in November 2011** (+132% over baseline). This surge underscores the critical importance of holiday giftware purchasing in driving annual commercial solvency. The December 2011 dip reflects truncation ending on December 9 (only 9 operational days recorded).
+
+![Monthly Revenue Trajectory](../plots/04_monthly_revenue_trend.png){width=65%}
+
+- **Retail Takeaway**: The Q4 holiday season constitutes the primary commercial revenue driver, reinforcing the need for proactive customer re-engagement ahead of October and November.
 
 
-\newpage
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
@@ -177,13 +186,16 @@ This hygiene sequence yielded **392,692 verified commercial line-items** represe
 We set a snapshot reference date at `2011-12-10` (one day after the final recorded invoice) and aggregated line-items into customer-level behavioral matrices:
 $$	ext{Recency } (R) = 	ext{SnapshotDate} - \max(	ext{InvoiceDate}_i)$$
 $$	ext{Frequency } (F) = 	ext{Count}(	ext{Unique InvoiceNo}_i)$$
-$$	ext{Monetary } (M) = \sum_{j} (	ext{Quantity}_{ij} 	imes 	ext{UnitPrice}_{ij})$$
-$$	ext{AOV} = rac{M}{F}$$
+$$	ext{Monetary } (M) = \sum_{j} (	ext{Quantity}_{ij} 	imes 	ext{UnitPrice}_{ij}), \quad 	ext{AOV} = rac{M}{F}$$
 
 The raw feature matrix was preserved in `capstone_2_onlineretail/data_processed/rfm_raw-features01.csv`.
 
-![Raw RFM Metric Distributions](../plots/05_raw_rfm_distributions.png){width=85%}
+![Raw RFM Metric Distributions](../plots/05_raw_rfm_distributions.png){width=62%}
 
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
 ### 4.3 Severe Skewness & Mathematical Transformation Inspiration
 Inspection of the raw RFM features revealed extreme non-normality and power-law right skewness:
 - **Recency ($R$)**: Mean 92.5 days, Median 51.0 days, Skewness: **+1.25**
@@ -195,7 +207,7 @@ Clustering algorithms relying on Euclidean distance (such as K-Means and Ward Ag
 To neutralize this distortion, we applied a logarithmic monotonic transformation:
 $$x_{	ext{trans}} = \log(1 + x) = \ln(1 + x)$$
 
-![Log-Transformed RFM Distributions](../plots/06_log_transformed_rfm_distributions.png){width=85%}
+![Log-Transformed RFM Distributions](../plots/06_log_transformed_rfm_distributions.png){width=62%}
 
 As demonstrated in Plot 06, the logarithmic transformation successfully stabilized variance and reshaped feature distributions toward near-Gaussian bell curves:
 - Recency skewness normalized to **-0.38**
@@ -205,7 +217,6 @@ As demonstrated in Plot 06, the logarithmic transformation successfully stabiliz
 The transformed features were standardized using `StandardScaler` ($\mu = 0, \sigma = 1$) to eliminate dimensional scale discrepancies, and saved in `capstone_2_onlineretail/data_processed/rfm_transformed-cluster01.csv` and `capstone_2_onlineretail/models/retail_scaler_iter01.joblib`.
 
 
-\newpage
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
@@ -216,22 +227,21 @@ Customer segmentation is fundamentally an unsupervised learning problem, as grou
 
 | Algorithm Family | Candidate Model | Core Mathematical Mechanism | Key Advantages | Primary Limitations |
 | :--- | :--- | :--- | :--- | :--- |
-| **Partitioning** | **K-Means Clustering** | Minimizes Within-Cluster Sum of Squares (Inertia) around $k$ centroids: $\min \sum \|x_i - \mu_k\|^2$ | Computationally efficient $\mathcal{O}(n \cdot k \cdot t)$; scales to millions of users; intuitive spherical centroids | Requires pre-specifying $k$; assumes spherical cluster geometries |
+| **Partitioning** | **K-Means Clustering** | Minimizes Within-Cluster Sum of Squares (Inertia) around $k$ centroids: $\min \sum \|x_i - \mu_k\|^2$ | Efficient $\mathcal{O}(n \cdot k \cdot t)$; scales to millions of users; intuitive spherical centroids | Requires pre-specifying $k$; assumes spherical cluster geometries |
 | **Hierarchical** | **Agglomerative Clustering (Ward Linkage)** | Bottom-up greedy tree construction minimizing variance growth $\Delta 	ext{ESS}$ at each merge | Generates deterministic dendrogram hierarchy; no initial centroid seeding; reveals nested sub-cohorts | Quadratic computational complexity $\mathcal{O}(n^2)$; memory-intensive for large datasets |
-| **Density-Based** | **DBSCAN** | Groups points within core radius $\epsilon$ containing $\ge 	ext{MinPts}$; separates arbitrary noise points | Discovers non-spherical shapes; natively isolates anomalous outlier accounts; does not require $k$ | Struggles with variable density clusters; sensitive to hyperparameter tuning ($\epsilon$, $	ext{MinPts}$) |
+| **Density-Based** | **DBSCAN** | Groups points within core radius $\epsilon$ containing $\ge 	ext{MinPts}$; separates arbitrary noise points | Discovers non-spherical shapes; natively isolates anomalous outlier accounts; does not require $k$ | Sensitive to density thresholds ($\epsilon$, $	ext{MinPts}$); struggles with continuous clouds |
 
 ### 5.2 Dimensionality Reduction & Feature Space Projection (PCA)
 To facilitate spatial visualization and eliminate collinear redundancy among RFM metrics, we integrated Principal Component Analysis (PCA) prior to cluster evaluation:
-- **PC1 (Customer Engagement & Lifetime Value Spectrum)**: Captures **75.08%** of total variance. Loading vectors load heavily positive on Frequency (+0.60) and Monetary (+0.61), and strongly negative on Recency (-0.51).
-- **PC2 (Order Structure & Unit Dynamics)**: Captures **18.79%** of variance, isolating transaction cadence from basket volume.
+- **PC1 (Engagement & Lifetime Value)**: Captures **75.08%** of total variance. Loading vectors load heavily positive on Frequency (+0.60) and Monetary (+0.61), and strongly negative on Recency (-0.51).
+- **PC2 (Order Structure & Basket Dynamics)**: Captures **18.79%** of variance, isolating transaction cadence from basket volume.
 - **Cumulative Information Retention**: Two principal components explain **93.87% of total variance**, providing an analytically lossless 2D subspace for visual clustering diagnostics.
 
-![PCA Feature Loadings](../plots/07_pca_feature_loadings.png){width=85%}
+![PCA Feature Loadings](../plots/07_pca_feature_loadings.png){width=62%}
 
-The projected 2D coordinates were preserved in `capstone_2_onlineretail/data_processed/rfm_pca_projected-cluster02.csv` and serialized in `capstone_2_onlineretail/models/retail_pca_iter01.joblib`.
+The projected coordinates were preserved in `capstone_2_onlineretail/data_processed/rfm_pca_projected-cluster02.csv` and serialized in `capstone_2_onlineretail/models/retail_pca_iter01.joblib`.
 
 
-\newpage
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
@@ -250,7 +260,6 @@ To independently validate K-Means, we cross-referenced its topological partition
 - The hierarchical tree structure independently reveals **four prominent, widely separated branches** above a linkage distance threshold of 12.0, confirming that a 4-cluster topology represents the genuine underlying structure of customer purchasing behavior rather than an artifact of K-Means centroid placement.
 
 
-\newpage
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
@@ -269,7 +278,6 @@ The validity of our unsupervised segmentation architecture is grounded in severa
 3. **Independence of Customer Entities**: Each unique `CustomerID` is assumed to act as an independent commercial decision-maker. While some small wholesale accounts may operate multiple subsidiary accounts, the dataset lacks secondary firmographic data to resolve cross-entity corporate ownership.
 
 
-\newpage
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
@@ -277,33 +285,29 @@ The validity of our unsupervised segmentation architecture is grounded in severa
 
 ### 8.1 Validation Metrics for Unsupervised Clustering
 Unlike supervised learning where ground-truth labels allow direct accuracy calculations, unsupervised clustering requires intrinsic geometric validation metrics:
-
 1. **Within-Cluster Sum of Squares (Inertia)**: Measures cluster compactness:
    $$	ext{Inertia} = \sum_{k=1}^{K} \sum_{x_i \in C_k} \|x_i - \mu_k\|^2$$
-   The "Elbow Method" identifies the point of diminishing marginal returns where additional clusters yield negligible variance reduction.
-2. **Silhouette Coefficient**: Measures cluster separation and individual point cohesion:
-   $$s(i) = rac{b(i) - a(i)}{\max(a(i), b(i))}, \quad s(i) \in [-1, +1]$$
-   where $a(i)$ is the mean intra-cluster distance and $b(i)$ is the mean nearest-cluster distance.
-3. **Davies-Bouldin Index (DBI)**: Evaluates the ratio of intra-cluster scatter to inter-cluster separation:
-   $$R_{ij} = rac{s_i + s_j}{d(\mu_i, \mu_j)}, \quad 	ext{DB} = rac{1}{k} \sum_{i=1}^{k} \max_{j 
-eq i} R_{ij}$$
-   Lower values indicate tighter, more distinct clusters.
+   The "Elbow Method" identifies diminishing marginal variance reduction.
+2. **Silhouette Coefficient**: Measures cluster separation and point cohesion ($s(i) \in [-1, +1]$).
+3. **Davies-Bouldin Index (DBI)**: Ratio of intra-cluster scatter to inter-cluster separation (lower is superior).
 
-![Elbow & Silhouette Diagnostics](../plots/08_kmeans_elbow_silhouette.png){width=85%}
+![Elbow & Silhouette Diagnostics](../plots/08_kmeans_elbow_silhouette.png){width=62%}
 
 ### 8.2 K-Means Hyperparameter Tuning Across $k \in [2, 6]$
 We evaluated K-Means across candidate cluster counts from $k=2$ to $k=6$:
 
 | Clusters ($k$) | Inertia (WCSS) | Silhouette Score | Davies-Bouldin Index | Operational Assessment |
 | :---: | :---: | :---: | :---: | :--- |
-| **$k=2$** | 6,483.59 | **0.4328** | **0.8925** | High mathematical separation; merely splits active vs. inactive accounts (too coarse) |
-| **$k=3$** | 4,869.49 | 0.3365 | 1.0483 | Identifies active, mid, churned; fails to distinguish high-value VIP whales |
-| **$k=4$ (Champion)** | **3,939.05** | **0.3375** | **1.0086** | **Optimal commercial granularity; isolates VIP Champions, Loyalists, Promising, Lost** |
+| **$k=2$** | 6,483.59 | **0.4328** | **0.8925** | High separation; binary active vs. inactive split (too coarse) |
+| **$k=3$** | 4,869.49 | 0.3365 | 1.0483 | Identifies active, mid, churned; fails to distinguish VIP whales |
+| **$k=4$ (Champion)** | **3,939.05** | **0.3375** | **1.0086** | **Optimal commercial granularity; isolates 4 distinct personas** |
 | **$k=5$** | 3,296.71 | 0.3162 | 0.9878 | Diminishing returns; fragments loyalist segment into arbitrary sub-tiers |
-| **$k=6$** | 2,855.76 | 0.3124 | 1.0210 | Over-fragmentation; increases campaign management overhead without value gain |
+| **$k=6$** | 2,855.76 | 0.3124 | 1.0210 | Over-fragmentation; increases campaign management overhead |
 
-![Ward Dendrogram](../plots/09_hierarchical_dendrogram.png){width=85%}
 
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
 ### 8.3 Cross-Algorithmic Benchmark: K-Means vs. Agglomerative vs. DBSCAN
 We benchmarked our champion $k=4$ K-Means model against Agglomerative Hierarchical Clustering and DBSCAN:
 
@@ -311,12 +315,15 @@ We benchmarked our champion $k=4$ K-Means model against Agglomerative Hierarchic
 | :--- | :---: | :---: | :---: | :---: | :--- |
 | **K-Means (Champion)** | $k=4$, $n\_init=10$ | **0.3375** | **1.0086** | **0** | **Superior cohesion, balanced personas, production scalability** |
 | **Agglomerative Clustering** | $k=4$, Ward Linkage | 0.2800 | 1.0992 | 0 | Solid structural validation; lower silhouette score than K-Means |
-| **DBSCAN** | $\epsilon=0.75$, $MinPts=10$ | 0.0000 | 0.0000 | 35 | Fails density test: lumps 4,303 points into 1 giant cluster; flags 35 noise points |
+| **DBSCAN** | $\epsilon=0.75$, $MinPts=10$ | 0.0000 | 0.0000 | 35 | Fails density test: lumps 4,303 points into 1 cluster; 35 noise points |
 
-The champion K-Means model was trained and serialized to `capstone_2_onlineretail/models/retail_kmeans_champion_k4.joblib`.
+![Ward Dendrogram](../plots/09_hierarchical_dendrogram.png){width=65%}
+
+- **Topological Confirmation**: The Ward-linkage dendrogram above displays four prominent, highly separated primary branches above linkage distance threshold 12.0. This independently validates the 4-cluster topological structure discovered by K-Means, confirming that customer behavioral patterns naturally divide into four distinct archetypes.
+- **DBSCAN Evaluation**: In continuous normalized RFM space, density-based clustering fails to form natural boundaries because the data forms a continuous Gaussian cloud rather than discrete islands. DBSCAN merged 99.2% of points into a single cluster while isolating 35 extreme spenders as noise.
+- The champion K-Means model was trained and serialized to `capstone_2_onlineretail/models/retail_kmeans_champion_k4.joblib`.
 
 
-\newpage
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
@@ -333,7 +340,7 @@ Executing our champion $k=4$ model on the 4,338 customer base reveals four disti
 | **Lost / Churned Inactive** | **1,617** | **37.28%** | **182.63 days** | **1.32 orders** | **£347.85** | **£288.08** | **£562,469.24** | **6.33%** |
 | **Total / Enterprise** | **4,338** | **100.0%** | **92.51 days** | **4.27 orders** | **£2,054.27** | **£441.72** | **£8,887,208.89** | **100.0%** |
 
-![2D PCA Customer Clusters](../plots/10_pca_customer_clusters.png){width=85%}
+![2D PCA Customer Clusters](../plots/10_pca_customer_clusters.png){width=65%}
 
 ### 9.2 Spatial Persona Separation in 2D PCA Space
 Plot 10 demonstrates outstanding geometric separability across the four personas:
@@ -342,14 +349,24 @@ Plot 10 demonstrates outstanding geometric separability across the four personas
 - **Promising Recent Shoppers** form a distinct boundary in the positive PC2 quadrant, reflecting fresh recency ($18.2$ days) with compact order counts.
 - **Lost / Churned Inactive** congregate tightly in the negative PC1 region ($PC1 < -0.5$), characterized by extended dormancy ($>180$ days) and low lifetime monetary value.
 
-![Persona Metric Comparison](../plots/11_cluster_persona_metrics.png){width=85%}
 
-### 9.3 Comparative Metric Dynamics
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
+### 9.3 Comparative Metric Dynamics Across Personas
+Examining the cross-metric distributions across the four personas reveals decisive behavioral divergence:
 - **Recency Gradient**: Champions display fresh recency (**12.08 days**; median 8.0 days), closely followed by Promising Shoppers (**18.21 days**; median 17.0 days). In contrast, Lost Inactive accounts average **182.63 days** (over 6 months since last purchase).
-- **Monetary & AOV Maturity**: Champions spend **£8,112.93**, over 4.5× regular repeaters (£1,804.82) and 23× churned buyers (£347.85). Furthermore, repeat relationship depth directly expands basket value: Champions achieve an AOV of **£623.83**, whereas new Promising accounts average **£278.34**.
+- **Frequency Disparity**: Champions make an average of **13.79 orders per year**, compared to 4.11 for Loyal Repeaters, 2.14 for Promising Shoppers, and 1.32 for Lost Inactive buyers.
+- **Monetary & AOV Maturity**: Champions spend an average of **£8,112.93**, over 4.5× regular repeaters (£1,804.82) and 23× churned buyers (£347.85). Furthermore, repeat relationship depth directly expands basket value: Champions achieve an AOV of **£623.83**, whereas new Promising accounts average **£278.34**.
 
-![Pareto Revenue Concentration](../plots/12_segment_revenue_contribution.png){width=85%}
+![Persona Metric Comparison](../plots/11_cluster_persona_metrics.png){width=65%}
 
+- **Basket Economics**: Repeat buyers not only purchase more frequently, but consolidate their purchasing into larger order sizes, reflecting brand trust and wholesale catalog adoption.
+
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
 ### 9.4 Pareto Asymmetry: 43.4% of Customers Drive 88.5% of Revenue
 Plot 12 establishes empirical proof of the Pareto Principle (80/20 rule) in digital retail:
 - **Champions / Whales**: Represent only **16.34% of headcount**, yet generate **64.72% of total company revenue (£5.75M)**.
@@ -357,8 +374,14 @@ Plot 12 establishes empirical proof of the Pareto Principle (80/20 rule) in digi
 - **The Power Tier (Champions + Loyalists)**: Combined, these two cohorts comprise **43.38% of customers (1,882 accounts) and generate 88.54% of gross revenue (£7.87M of £8.89M)**.
 - **The Dormant Tail**: The **Lost / Churned Inactive** cohort constitutes the single largest group by headcount (**37.28%**, 1,617 users), but delivers merely **6.33% of revenue (£562.5K)**.
 
----
+![Pareto Revenue Concentration](../plots/12_segment_revenue_contribution.png){width=65%}
 
+- **Commercial Mandate**: Protecting and nurturing the top 43.4% of accounts is paramount. A 5% attrition in Champions would erase more enterprise profit than the entire annual gross sales of the Lost cohort.
+
+
+```{=openxml}
+<w:p><w:r><w:br w:type="page"/></w:r></w:p>
+```
 ### 9.5 Prescriptive Retail Marketing Playbooks
 
 Based on these empirical profiles, we formulate four tailored operational playbooks:
@@ -383,7 +406,6 @@ Based on these empirical profiles, we formulate four tailored operational playbo
 - **Ad Spend De-escalation**: Suppress active ad spend on accounts unresponsive after 3 attempts, redirecting marketing capital toward high-LTV acquisition.
 
 
-\newpage
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
@@ -407,7 +429,6 @@ Integrating customer segment IDs as latent context within recommendation engines
 - Implementing the **Apriori / FP-Growth algorithm** to discover high-confidence association rules within segments (e.g., Champions exhibiting cross-category wholesale bulk purchasing vs. Retail Gifters buying single decorative items).
 
 
-\newpage
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
@@ -434,7 +455,6 @@ The project deliverables are fully containerized, reproducible, and committed to
 - **Publication Figures**: 12 high-resolution 300 DPI plots in `capstone_2_onlineretail/plots/`
 
 
-\newpage
 ```{=openxml}
 <w:p><w:r><w:br w:type="page"/></w:r></w:p>
 ```
