@@ -18,10 +18,6 @@
 ### Executive Abstract
 This report presents an end-to-end, publication-grade predictive modeling architecture developed for a national retail chain operating 45 distinct store outlets across diverse macroeconomic environments. Facing critical friction in matching store-level inventory supply with dynamic consumer demand, we formulate an empirical time-series forecasting framework to project weekly store sales over a 12-week forward planning horizon. Using 6,435 weekly observations spanning February 2010 to October 2012, we evaluate a spectrum of models including naive persistence, classical statistical SARIMAX, Facebook Prophet, Random Forest, and Extreme Gradient Boosting (XGBoost). Using a 3-fold expanding chronological `TimeSeriesSplit` cross-validation scheme, our tuned champion XGBoost regressor achieves state-of-the-art accuracy with an out-of-sample Root Mean Squared Error (RMSE) of **\$49,140.51** and a Weighted Absolute Percentage Error (WAPE) of **3.27%** across all 45 stores (reducing total forecast dollar error by **>28%** over baseline). Finally, we translate forecast errors into mathematically optimal safety stock buffers and dynamic Reorder Points (ROP), ensuring **95% to 98% on-shelf availability** while minimizing capital lock-in and inventory holding costs.
 
-\newpage
-```{=openxml}
-<w:p><w:r><w:br w:type="page"/></w:r></w:p>
-```
 # Table of Contents
 
 ---
@@ -45,10 +41,6 @@ This report presents an end-to-end, publication-grade predictive modeling archit
 
 *Note: All sections in this report adhere strictly to the 12-section project report blueprint specified in `Draft.pdf` and `guideline.md`.*
 
-\newpage
-```{=openxml}
-<w:p><w:r><w:br w:type="page"/></w:r></w:p>
-```
 # 1. Problem Statement
 
 ### 1.1 Context & Multi-Outlet Supply Chain Complexity
@@ -65,10 +57,6 @@ Traditional retail replenishment often relies on static moving averages or decen
 
 To resolve this friction, we are tasked with developing an empirical, automated machine learning forecasting system that generates out-of-sample weekly sales forecasts for **all 45 individual stores for a 12-week forward planning horizon**, providing supply chain managers with actionable demand distributions to optimize procurement, central warehouse staging, and retail floor allocation.
 
-\newpage
-```{=openxml}
-<w:p><w:r><w:br w:type="page"/></w:r></w:p>
-```
 # 2. Project Objective
 
 ### 2.1 Core Deliverables & Operational Targets
@@ -89,10 +77,6 @@ The final objective is bridging the gap between statistical point forecasts and 
 $$\text{Safety Stock} = Z_{\alpha} \times \text{RMSE}_{\text{store}} \times \sqrt{L}$$
 ensuring a mathematically guaranteed **95% to 98% On-Shelf Availability (OSA)** service level while minimizing unnecessary inventory holding costs.
 
-\newpage
-```{=openxml}
-<w:p><w:r><w:br w:type="page"/></w:r></w:p>
-```
 # 3. Data Description
 
 ### 3.1 Balanced Panel Dataset Structure & Completeness Audit
@@ -112,14 +96,10 @@ The dataset encompasses eight core features capturing store identification, temp
 | `CPI` | Float | Consumer Price Index | Mean: 171.6; Bimodal: 126.1 to 227.2 |
 | `Unemployment` | Float | Regional unemployment rate (%) | Mean: 8.00%; Range: 3.88% to 14.31% |
 
-\newpage
-```{=openxml}
-<w:p><w:r><w:br w:type="page"/></w:r></w:p>
-```
 ### 3.3 Store Volume Stratification & Volatility Profiles
 Store performance analysis confirms extreme structural heterogeneity across the retail network. Mean weekly sales range from **\$259,862** (Store 33) to **\$2,107,677** (Store 20)—an eight-fold volume spread. 
 
-![Weekly Sales Distribution Boxplot Across 45 Stores](../plots/01_store_sales_distribution_boxplot.png){width=80%}
+![Weekly Sales Distribution Boxplot Across 45 Stores](../plots/01_store_sales_distribution_boxplot.png)
 
 - **Top 5 Stores (Tier 1 Flagship)**: Store 20 (\$2.11M), Store 4 (\$2.09M), Store 14 (\$2.02M), Store 13 (\$2.00M), Store 2 (\$1.93M).
 - **Bottom 5 Stores (Tier 3 Boutique)**: Store 33 (\$260K), Store 44 (\$303K), Store 5 (\$318K), Store 36 (\$374K), Store 38 (\$386K).
@@ -128,10 +108,6 @@ Store performance analysis confirms extreme structural heterogeneity across the 
   - Across all 45 stores, **Store 35** exhibits the highest overall volatility (CV = 0.230, mean \$919.7K, std \$211.2K).
 - **Supply Chain Takeaway**: Uniform national replenishment models fail in multi-tier retail. Safety stocks, reorder cycles, and truck deliveries must be dynamically scaled by store volume tier.
 
-\newpage
-```{=openxml}
-<w:p><w:r><w:br w:type="page"/></w:r></w:p>
-```
 # 4. Data Pre-processing Steps and Inspiration
 
 ### 4.1 Chronological Sequencing & Partitioning
@@ -146,18 +122,14 @@ $$\text{sin\_month} = \sin(2\pi \times \text{Month}/12), \quad \text{cos\_month}
 
 Furthermore, four distinct binary event indicators were constructed to differentiate customer behavior across holiday types: `is_super_bowl`, `is_labor_day`, `is_thanksgiving`, and `is_christmas`.
 
-![Holiday Sales Uplift Comparison Across Event Types](../plots/03_holiday_sales_uplift_comparison.png){width=65%}
+![Holiday Sales Uplift Comparison Across Event Types](../plots/03_holiday_sales_uplift_comparison.png)
 
 Empirical uplift analysis reveals that **Thanksgiving / Black Friday** delivers a massive **+41.3%** lift (\$1,471,273 vs. \$1,041,256 baseline), while Super Bowl provides **+3.6%**, Labor Day delivers **+0.1%**, and official Christmas week registers **-7.7%** (due to calendar cutoff capturing the post-Christmas shopping lull, whereas pre-Christmas Week 51 surges by +55% to +70%).
 
-\newpage
-```{=openxml}
-<w:p><w:r><w:br w:type="page"/></w:r></w:p>
-```
 ### 4.3 Autoregressive Lag & Rolling Window Formulations
 To supply our supervised learning algorithms with short-term inertia and seasonal memory, we engineered:
 1. **Autoregressive Lags**: $\text{Lag}_1$ (previous week inertia), $\text{Lag}_2$ (two-week trend), $\text{Lag}_4$ (monthly cycle), and $\text{Lag}_{12}$ (quarterly rhythm).
-2. **Rolling Window Statistics**: Moving average and moving standard deviation over 4-week and 12-week windows. All rolling calculations were strictly shifted by 1 period ($	ext{shift}(1)$) to guarantee that future target values do not leak into current training matrices.
+2. **Rolling Window Statistics**: Moving average and moving standard deviation over 4-week and 12-week windows. All rolling calculations were strictly shifted by 1 period ($\text{shift}(1)$) to guarantee that future target values do not leak into current training matrices.
 
 ### 4.4 Preprocessed Dataset Versioning Audit
 In compliance with enterprise data governance, all transformed datasets were versioned and serialized into `capstone_1_walmart/data_processed/`:
@@ -166,20 +138,14 @@ In compliance with enterprise data governance, all transformed datasets were ver
 - `macro_cyclical_engineered-train03.csv` & `macro_cyclical_engineered-test03.csv`: Model-ready feature matrix (27 columns).
 - `forward_12week-forecast01.csv`: Final 12-week recursive forward projections across all 45 stores.
 
-![National Weekly Sales Trend with Annotated Holiday & Christmas Peaks](../plots/02_aggregate_sales_trend_with_holidays.png){width=78%}
+![National Weekly Sales Trend with Annotated Holiday & Christmas Peaks](../plots/02_aggregate_sales_trend_with_holidays.png)
 
-\newpage
-```{=openxml}
-<w:p><w:r><w:br w:type="page"/></w:r></w:p>
-```
 # 5. Choosing the Algorithm for the Project
 
 ### 5.1 Algorithmic Spectrum & Candidate Taxonomies
 To identify the optimal demand forecasting engine, we evaluated five distinct modeling families spanning classical heuristics, univariate statistical transfer functions, additive time series decompositions, and supervised tree ensembles:
 
-1. **Model 1: Naive Persistence Baseline (Lag 1)**  
-   $\hat{y}_{s, t} = y_{s, t-1}$  
-   
+1. **Model 1: Naive Persistence Baseline (Lag 1)**: $\hat{y}_{s, t} = y_{s, t-1}$  
    Carries forward the preceding week's sales volume. Provides an essential lower-bound benchmark: any viable machine learning system must substantially outperform persistence.
 
 2. **Model 2: Random Forest Regressor (Ensemble Bagging)**  
@@ -200,10 +166,6 @@ To identify the optimal demand forecasting engine, we evaluated five distinct mo
    $$y(t) = g(t) + s(t) + h(t) + \sum_{k=1}^K \beta_k x_{k,t} + \epsilon_t$$
    Configured with piecewise linear growth $g(t)$, Fourier yearly seasonality $s(t)$, and extra holiday/macro regressors fitted via Bayesian Stan optimization.
 
-\newpage
-```{=openxml}
-<w:p><w:r><w:br w:type="page"/></w:r></w:p>
-```
 # 6. Motivation and Reasons For Choosing the Algorithm
 
 ### 6.1 Cross-Store Panel Pooling & Shared Holiday Elasticity
@@ -214,17 +176,13 @@ The central architectural dilemma in multi-outlet retail forecasting is whether 
 ### 6.2 Non-Linear Macroeconomic Threshold Discovery
 Macroeconomic variables exhibit weak linear correlations with sales in aggregate (Unemployment: -0.106, CPI: -0.073, Temperature: -0.064, Fuel Price: +0.009).
 
-![Correlation Matrix Heatmap: Sales & Macroeconomic Regressors](../plots/04_macro_correlation_heatmap.png){width=45%}
+![Correlation Matrix Heatmap: Sales & Macroeconomic Regressors](../plots/04_macro_correlation_heatmap.png)
 
 Linear models struggle because economic sensitivity is non-linear and localized: unemployment increases above 10% severely depress discretionary retail, while sub-6% shifts have little effect. Tree-based algorithms naturally discover these localized threshold interactions through recursive partitioning without manual specification.
 
 ### 6.3 Robustness to Multicollinearity & Deployment Footprint
 Autoregressive lags and moving averages exhibit collinearity that destabilizes linear matrix inversions. Tree boosting is invariant to monotonic feature transformations and immune to collinearity breakdown. Furthermore, our tuned XGBoost model serializes to a compact **685 KB** footprint, executing multi-store forward inference in under **25 milliseconds**.
 
-\newpage
-```{=openxml}
-<w:p><w:r><w:br w:type="page"/></w:r></w:p>
-```
 # 7. Assumptions
 
 ### 7.1 Statistical Stationarity & Unit Root Hypothesis Testing
@@ -239,28 +197,21 @@ Classical time series modeling requires verifying that the underlying data gener
 
 **Statistical Takeaway**: Both the national aggregate and individual store sales decisively reject the null hypothesis of a stochastic unit root ($p < 0.0001$). The series does not exhibit random walk divergence, but possesses **strong 52-week deterministic annual seasonality**.
 
-![52-Week Additive Seasonal Decomposition of Aggregate Sales](../plots/05_time_series_decomposition.png){width=75%}
+![52-Week Additive Seasonal Decomposition of Aggregate Sales](../plots/05_time_series_decomposition.png)
 
-\newpage
-```{=openxml}
-<w:p><w:r><w:br w:type="page"/></w:r></w:p>
-```
 ### 7.2 Autocorrelation & Memory Structures (ACF / PACF Analysis)
 Diagnostic analysis of Autocorrelation (ACF) and Partial Autocorrelation (PACF) plots validates that demand inertia is heavily concentrated in the immediate past:
 
-![Autocorrelation (ACF) and Partial Autocorrelation (PACF) Diagnostic Plots](../plots/05b_acf_pacf_plots.png){width=70%}
+![Autocorrelation (ACF) and Partial Autocorrelation (PACF) Diagnostic Plots](../plots/05b_acf_pacf_plots.png)
 
 - **PACF of Raw Sales**: Exhibits a dominant spike at **Lag 1** ($\approx 0.72$) followed by an immediate drop within the 95% Bartlett confidence bands, confirming that an **AR(1) or AR(2)** process captures short-term demand persistence.
 - **ACF of Raw Sales**: Shows recurring positive spikes at **Lag 52**, corroborating the necessity of 52-week cyclical calendar encodings.
 
 ### 7.3 Operational Assumptions
-1. **Exogeneity of Macroeconomic Drivers**: Macroeconomic features (Fuel Price, CPI, Unemployment) are treated as exogenous variables. Forward projections assume these indicators remain stable over the short 12-week forecast window.
-2. **Physical Footprint Invariance**: We assume no major structural disruptions (store closures, square-footage expansions, remodels) occurred during the evaluation horizon.
+1. **Exogenous Persistence Scenario for Macro Drivers**: Macroeconomic features (Fuel Price, CPI, Unemployment, Temperature) are treated as exogenous variables. Forward projections evaluate a baseline persistence scenario where indicators are held constant at their latest observed store values ($T_{131}$). In enterprise production, this baseline can be seamlessly swapped for consensus macroeconomic forecasts or policy stress-test scenarios.
+2. **Holiday Calendar Definitions**: Official holiday flags strictly reflect the 4 designated events in the Walmart dataset (Thanksgiving, Christmas, Super Bowl, Labor Day). Massive seasonal peaks such as Week 51 (pre-Christmas) are captured via cyclical calendar encodings (`WeekOfYear=51`) and autoregressive lags rather than binary holiday flags.
+3. **Physical Footprint Invariance**: We assume no major structural disruptions (store closures, square-footage expansions, remodels) occurred during the evaluation horizon.
 
-\newpage
-```{=openxml}
-<w:p><w:r><w:br w:type="page"/></w:r></w:p>
-```
 # 8. Model Evaluation and Techniques
 
 ### 8.1 Chronological Cross-Validation Design (`TimeSeriesSplit`)
@@ -283,10 +234,6 @@ We conducted an empirical grid search over tree depth, learning rate, and tree c
 | **Candidate 2 (Deep)** | 8 | 0.03 | 350 | 0.85 | \$90,798.03 | \$49,926.61 | \$34,240.40 | 3.34% | High CV Var |
 | **Candidate 3 (Champion)** | **7** | **0.04** | **300** | **0.85** | **\$88,413.36** | **\$49,140.51** | **\$33,619.68** | **3.27%** | **Promoted** |
 
-\newpage
-```{=openxml}
-<w:p><w:r><w:br w:type="page"/></w:r></w:p>
-```
 ### 8.4 Out-of-Sample Comparative Performance Across Models
 The tuned champion XGBoost was benchmarked against all competing modeling families on the 12-week holdout test set (August 10 – October 26, 2012):
 
@@ -299,20 +246,16 @@ The tuned champion XGBoost was benchmarked against all competing modeling famili
 | **Statistical SARIMAX** | Sample Tiers (20, 1, 33) | \$104,025.64 | \$73,133.91 | 5.94% | 5.64% |
 | **Tuned XGBoost** | **Sample Tiers (20, 1, 33)** | **\$51,860.80** | **\$39,052.79** | **3.44%** | **3.01%** |
 
-![Forecast Error Comparison (WAPE %) on 12-Week Out-of-Sample Test](../plots/06_model_error_comparison_barchart.png){width=70%}
+![Forecast Error Comparison (WAPE %) on 12-Week Out-of-Sample Test](../plots/06_model_error_comparison_barchart.png)
 
 **Empirical Result**: Tuned XGBoost achieves the lowest error across every metric, reducing out-of-sample WAPE from **4.57% down to 3.27%**—an overall **28.4% reduction in total forecast dollar error** over naive persistence.
 
-\newpage
-```{=openxml}
-<w:p><w:r><w:br w:type="page"/></w:r></w:p>
-```
 # 9. Inferences from the Same
 
 ### 9.1 Empirical Performance Takeaways
 Analysis of predicted versus actual sales trajectories demonstrates that the tuned XGBoost model captures localized store demand across all volume tiers with high fidelity:
 
-![Predicted vs. Actual Weekly Sales Trajectories Across Store Tiers](../plots/07_predicted_vs_actual_12week_test.png){width=80%}
+![Predicted vs. Actual Weekly Sales Trajectories Across Store Tiers](../plots/07_predicted_vs_actual_12week_test.png)
 
 - **Tier 1 (Store 20, High Volume ~\$2.1M)**: Forecasted values track actual demand swings with sub-3.1% error, successfully mirroring late-August promotional spikes.
 - **Tier 2 (Store 1, Median Volume ~\$1.5M)**: Tightly tracks baseline sales with minimal variance.
@@ -322,10 +265,6 @@ Analysis of predicted versus actual sales trajectories demonstrates that the tun
 1. **Thanksgiving Surge**: Generates a **+41.3%** national volume uplift over regular weeks. In Tier 1 stores, weekly demand surges by over **\$900,000** in a single 7-day period.
 2. **Pre-Christmas Peak (Week 51)**: While official Christmas week experiences a post-holiday lull (-7.7%), the penultimate week of December represents the single largest revenue event of the fiscal year, expanding national volume by **+55% to +70%** (reaching \$80.9M nationally in 2010 and \$77.0M in 2011).
 
-\newpage
-```{=openxml}
-<w:p><w:r><w:br w:type="page"/></w:r></w:p>
-```
 ### 9.3 Store-Level Inventory Optimization & Safety Stock Formulations
 To operationalize these insights, we establish mathematical inventory replenishment guidelines:
 
@@ -338,16 +277,12 @@ Assuming a replenishment lead time of $L = 2$ weeks and a **95% service level** 
 ### 9.4 Forward 12-Week Demand Projections (Nov 2012 – Jan 2013)
 Deploying our champion XGBoost model over weeks 144 through 155 reproduces the upcoming holiday demand cycle:
 
-![Forward 12-Week Sales Demand Forecast Across Store Volume Tiers](../plots/08_forward_12week_store_forecasts.png){width=80%}
+![Forward 12-Week Sales Demand Forecast Across Store Volume Tiers](../plots/08_forward_12week_store_forecasts.png)
 
 - **Week 47 (Thanksgiving week - Nov 23, 2012)**: Projected national store sales jump by **+38% to +45%**.
 - **Week 51 (Pre-Christmas peak - Dec 21, 2012)**: Projected sales expand by **+55% to +70%**, peaking at ~\$3.1M in Store 20.
 - **January Normalization**: Post-holiday sales contract sharply by up to **60%**, reaching normalized baseline levels (~\$1.0M/store) by January 11, 2013. Warehouse orders must be aggressively tapered starting **December 10** to prevent dead-stock accumulation in Q1.
 
-\newpage
-```{=openxml}
-<w:p><w:r><w:br w:type="page"/></w:r></w:p>
-```
 # 10. Future Possibilities of the Project
 
 ### 10.1 Hierarchical Demand Reconciliation (MinT Architecture)
@@ -364,10 +299,6 @@ At the individual product level (SKU), demand is frequently "intermittent" (char
 1. **Automated NOAA Weather Integration**: Incorporating short-term (7 to 14 day) localized meteorological feeds into the live inference pipeline. Severe weather events (e.g. winter blizzards or extreme heatwaves) create acute, predictable shifts between physical store foot traffic and e-commerce fulfillment.
 2. **Dynamic Price Elasticity Simulation**: Incorporating historical markdown depth and promotional coupon data to simulate optimal price markdown schedules that clear excess inventory post-Christmas while maximizing net revenue recovery.
 
-\newpage
-```{=openxml}
-<w:p><w:r><w:br w:type="page"/></w:r></w:p>
-```
 # 11. Conclusion
 
 ### 11.1 Project Synthesis & Quantified Business Value
@@ -375,15 +306,11 @@ This Capstone project successfully delivers an end-to-end, statistically validat
 
 1. **State-of-the-Art Accuracy**: The champion Tuned XGBoost regressor delivers an out-of-sample **RMSE of \$49,140.51** and a **WAPE of 3.27%** across all 45 stores, breaking below the \$50,000 error threshold and reducing national forecast error by **>28%** relative to naive persistence.
 2. **Empirical Validation**: Time series stationarity was rigorously verified via ADF ($p < 0.0001$) and KPSS tests. Multi-fold chronological `TimeSeriesSplit` cross-validation ensured that model hyperparameters (depth 7, learning rate 0.04, 300 estimators) strictly outshine baseline configurations without future data leakage.
-3. **Actionable Supply Chain Policy**: By combining point forecasts with empirical error distributions, store managers are provided with mathematically grounded safety stock buffers ($$Z_{\alpha} \times \text{RMSE} \times \sqrt{L}$$) and Reorder Points that guarantee **95% to 98% on-shelf availability** while preventing costly post-holiday overstock gluts.
+3. **Actionable Supply Chain Policy**: By combining point forecasts with empirical error distributions, store managers are provided with mathematically grounded safety stock buffers ($Z_{\alpha} \times \text{RMSE} \times \sqrt{L}$) and Reorder Points that guarantee **95% to 98% on-shelf availability** while preventing costly post-holiday overstock gluts.
 
 ### 11.2 Operational Deployment Sign-Off
 All 7 versioned preprocessed datasets (`data_processed/`), 9 publication-grade figures (`plots/`), and 6 compressed model serializations (`models/`) are fully preserved in the project repository, ready for automated integration into enterprise Enterprise Resource Planning (ERP) and Warehouse Management Systems (WMS).
 
-\newpage
-```{=openxml}
-<w:p><w:r><w:br w:type="page"/></w:r></w:p>
-```
 # 12. References
 
 1. **Box, G. E., Jenkins, G. M., Reinsel, G. C., & Ljung, G. M.** (2015). *Time Series Analysis: Forecasting and Control* (5th ed.). John Wiley & Sons.

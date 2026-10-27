@@ -14,7 +14,7 @@ This repository hosts two industrial-grade Data Science & AI Capstone projects d
 | Deliverable | Description | Direct Link |
 | :--- | :--- | :--- |
 | 📓 **Interactive Notebook** | Complete end-to-end modular pipeline (EDA, stats tests, CV, models, forward forecasts) | [`01_walmart_sales_forecasting.ipynb`](./capstone_1_walmart/notebooks/01_walmart_sales_forecasting.ipynb) |
-| 📄 **Formal Project Report (PDF)** | Publication-grade 12-section PDF report conforming strictly to `Draft.pdf` guidelines | [`Walmart_Store_Sales_Forecasting_Report.pdf`](./capstone_1_walmart/reports/Walmart_Store_Sales_Forecasting_Report.pdf) |
+| 📄 **Formal Project Report (PDF)** | Comprehensive 12-section PDF report conforming strictly to `Draft.pdf` guidelines | [`Walmart_Store_Sales_Forecasting_Report.pdf`](./capstone_1_walmart/reports/Walmart_Store_Sales_Forecasting_Report.pdf) |
 | 📝 **Editable Report (Word)** | Microsoft Word document with embedded 300 DPI figures and native OpenXML page breaks | [`Walmart_Sales_Forecasting_Report.docx`](./capstone_1_walmart/reports/Walmart_Sales_Forecasting_Report.docx) |
 | 📋 **Master Markdown Report** | Complete markdown source document with LaTeX mathematical formulations | [`report_walmart_sales_forecasting.md`](./capstone_1_walmart/reports/report_walmart_sales_forecasting.md) |
 | 🏆 **Champion Model Weights** | Serialized tuned XGBoost regressor (Depth 7, LR 0.04, 300 estimators; 670 KB) | [`walmart_xgboost_iter02.joblib`](./capstone_1_walmart/models/walmart_xgboost_iter02.joblib) |
@@ -43,18 +43,18 @@ A national retail chain operating **45 superstores** across heterogeneous geogra
 
 ### Model Evaluation & Out-of-Sample Benchmark
 
-Models were validated using a 3-fold expanding chronological `TimeSeriesSplit` cross-validation scheme to strictly prevent future data leakage. Out-of-sample performance was benchmarked on the final 12-week holdout test partition (540 observations across 45 stores):
+Models were validated using a 3-fold date-grouped expanding chronological panel cross-validation across all 45 stores cross-validation scheme to strictly prevent future data leakage. Out-of-sample performance was benchmarked on the final 12-week holdout test partition (540 observations across 45 stores):
 
 | Model Architecture | Scope | Out-of-Sample RMSE | Out-of-Sample MAE | Out-of-Sample MAPE | Out-of-Sample WAPE | Validation Status |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | **Naive Baseline (Lag 1 Persistence)** | All 45 Stores | \$72,442.05 | \$46,965.55 | 4.71% | 4.57% | Lower Bound Benchmark |
 | **Random Forest Regressor (150 Trees)** | All 45 Stores | \$56,656.71 | \$38,418.35 | 3.78% | 3.74% | Ensemble Bagging |
-| 🏆 **Tuned Champion XGBoost** | **All 45 Stores** | **\$49,140.51** | **\$33,619.68** | **3.40%** | **3.27%** | **Promoted Champion** |
+| 🏆 **Tuned Champion XGBoost** | **All 45 Stores** | **\$49,171.19** | **\$34,414.52** | **3.40%** | **3.35%** | **Promoted Champion** |
 | **Facebook Prophet (Bayesian GAM)** | Sample Tiers (20, 1, 33) | \$86,284.53 | \$66,089.59 | 5.36% | 5.10% | Additive Decomposition |
 | **Statistical SARIMAX (1,1,1)x(0,1,1)₁₂** | Sample Tiers (20, 1, 33) | \$104,025.64 | \$73,133.91 | 5.94% | 5.64% | Stochastic Regressor |
 | 🏆 **Tuned XGBoost** | **Sample Tiers (20, 1, 33)** | **\$51,860.80** | **\$39,052.79** | **3.44%** | **3.01%** | **Promoted Champion** |
 
-> **Business Impact**: The tuned champion XGBoost model reduces national forecast dollar error by **>28%** relative to the naive persistence model, achieving an unprecedented **3.27% WAPE** across all 45 outlets.
+> **Business Impact**: The tuned champion XGBoost model reduces national forecast dollar error by **>26.7%** relative to the naive persistence model, achieving an unprecedented **3.35% WAPE** across all 45 outlets.
 
 ---
 
@@ -77,7 +77,7 @@ capstone_1_walmart/
 ├── notebooks/
 │   └── 01_walmart_sales_forecasting.ipynb   # Master executable notebook (10 sections, deepmind kernel)
 ├── reports/
-│   ├── Walmart_Store_Sales_Forecasting_Report.pdf  # Formal 19-page publication PDF (Draft.pdf format)
+│   ├── Walmart_Store_Sales_Forecasting_Report.pdf  # Formal 24-page PDF report (Draft.pdf format)
 │   ├── Walmart_Sales_Forecasting_Report.docx       # Editable Microsoft Word document with embedded plots
 │   └── report_walmart_sales_forecasting.md         # Master source markdown report with LaTeX math
 ├── models/
@@ -115,7 +115,7 @@ capstone_1_walmart/
 | Deliverable | Description | Direct Link |
 | :--- | :--- | :--- |
 | 📓 **Interactive Notebook** | Complete end-to-end unsupervised pipeline (Hygiene, RFM, Log1p, PCA, K-Means, Agglomerative, DBSCAN) | [`01_retail_customer_segmentation.ipynb`](./capstone_2_onlineretail/notebooks/01_retail_customer_segmentation.ipynb) |
-| 📄 **Formal Project Report (PDF)** | Publication-grade 28-page PDF report conforming strictly to `Draft.pdf` guidelines | [`Online_Retail_Customer_Segmentation_Report.pdf`](./capstone_2_onlineretail/reports/Online_Retail_Customer_Segmentation_Report.pdf) |
+| 📄 **Formal Project Report (PDF)** | Comprehensive 12-section 27-page PDF report conforming strictly to `Draft.pdf` guidelines | [`Online_Retail_Customer_Segmentation_Report.pdf`](./capstone_2_onlineretail/reports/Online_Retail_Customer_Segmentation_Report.pdf) |
 | 📝 **Editable Report (Word)** | Microsoft Word document with embedded 300 DPI figures and native OpenXML page breaks | [`Retail_Customer_Segmentation_Report.docx`](./capstone_2_onlineretail/reports/Retail_Customer_Segmentation_Report.docx) |
 | 📋 **Master Markdown Report** | Complete markdown source document with LaTeX formulations and persona tables | [`report_retail_customer_segmentation.md`](./capstone_2_onlineretail/reports/report_retail_customer_segmentation.md) |
 | 🏆 **Champion Clustering Model** | Serialized Champion K-Means model ($k=4$, `k-means++` seeding, `random_state=42`) | [`retail_kmeans_champion_k4.joblib`](./capstone_2_onlineretail/models/retail_kmeans_champion_k4.joblib) |
@@ -134,12 +134,12 @@ An international e-commerce retailer based in the UK operating across **38 globa
 ### Key Empirical Findings & Mathematical Profiling
 - **Severe Transactional Skewness Rectified**:
   - *Frequency ($F$)*: Mean 4.27 orders, Max 209 orders; extreme positive skewness of **+12.07** successfully normalized to **+1.21** via monotonic $\log(1+x)$.
-  - *Monetary ($M$)*: Mean £2,054.27, Median £674.45, Max £280,206.02; extreme positive skewness of **+19.32** normalized to **+0.39** via $\log(1+x)$.
+  - *Monetary ($M$)*: Mean £2,048.69, Median £668.57, Max £280,206.02; extreme positive skewness of **+19.32** normalized to **+0.39** via $\log(1+x)$.
   - *Recency ($R$)*: Mean 92.5 days, Median 51.0 days; skewness shifted from +1.25 to **-0.38**.
 - **PCA Dimensionality Reduction**:
   - **PC1 (Customer Engagement & Lifetime Value Spectrum)**: Explains **75.08%** of total variance (strong positive loadings on Frequency +0.60, Monetary +0.61; negative on Recency -0.51).
   - **PC2 (Order Structure & Basket Dynamics)**: Explains **18.79%** of variance.
-  - **Cumulative Variance**: **93.87% explained variance** across 2 dimensions, enabling an analytically lossless 2D spatial representation.
+  - **Cumulative Variance**: **93.87% explained variance** across 2 dimensions, enabling an high-fidelity 2D visualization (retaining 93.87% of behavioral variance).
 - **Top Product & Geographic Dynamics**:
   - `PAPER CRAFT , LITTLE BIRDIE`: Highest single-transaction revenue (£168.5K via 1 wholesale bulk order of 80,995 units).
   - `REGENCY CAKESTAND 3 TIER`: Premier recurring commercial bestseller (£142.3K across 1,703 distinct customer orders).
@@ -173,12 +173,12 @@ Applying the champion $k=4$ model to the 4,338 customer base reveals four action
 | 👑 **Champions (Whales)** | **709** | **16.34%** | **12.08 days** | **13.79 orders** | **£8,112.93** | **£623.83** | **£5,752,065.07** | **64.72%** |
 | 💎 **Loyal Active Repeaters** | **1,173** | **27.04%** | **70.13 days** | **4.11 orders** | **£1,804.82** | **£571.27** | **£2,117,050.02** | **23.82%** |
 | 🌱 **Promising Recent Shoppers** | **839** | **19.34%** | **18.21 days** | **2.14 orders** | **£543.06** | **£278.34** | **£455,624.56** | **5.13%** |
-| 💤 **Lost / Churned Inactive** | **1,617** | **37.28%** | **182.63 days** | **1.32 orders** | **£347.85** | **£288.08** | **£562,469.24** | **6.33%** |
-| **Enterprise Total** | **4,338** | **100.0%** | **92.51 days** | **4.27 orders** | **£2,054.27** | **£441.72** | **£8,887,208.89** | **100.0%** |
+| 💤 **Lapsed / Inactive Customers** | **1,617** | **37.28%** | **182.63 days** | **1.32 orders** | **£347.85** | **£288.08** | **£562,469.24** | **6.33%** |
+| **Enterprise Total** | **4,338** | **100.0%** | **92.54 days** | **4.27 orders** | **£2,048.69** | **£417.65** | **£8,887,208.89** | **100.0%** |
 
 > **Empirical Validation of the Pareto Principle**:
 > - **Top 43.38% of customers (Champions + Loyalists = 1,882 accounts) generate 88.54% of total gross sales (£7.87M of £8.89M)**.
-> - Conversely, the **Lost / Churned Inactive** cohort represents **37.28% of customer headcount** but generates merely **6.33% of revenue**, demonstrating that retargeting ad spend must be drastically reallocated toward Champions retention and Promising nurture sequences.
+> - Conversely, the **Lapsed / Inactive Customers** cohort represents **37.28% of customer headcount** but generates merely **6.33% of revenue**, demonstrating that retargeting ad spend must be drastically reallocated toward Champions retention and Promising nurture sequences.
 
 ---
 
@@ -186,7 +186,7 @@ Applying the champion $k=4$ model to the 4,338 customer base reveals four action
 1. **Champions (Whales)**: Dedicated VIP account representatives, early product catalog access for Christmas lines, and tiered volume rebates (e.g. 5% credit on spend $>£10,000$).
 2. **Loyal Active Repeaters**: Personalized cross-selling engines (association rule pairings), gamified milestone loyalty progression ("Order 5 times for free annual shipping").
 3. **Promising Recent Shoppers**: 3-part educational email nurture series within 7 days, 15% second-purchase acceleration incentive valid for 21 days.
-4. **Lost / Churned Inactive**: Automated win-back campaign with £10 gift voucher; 1-question exit survey; suppress ad spend after 3 unresponsive attempts.
+4. **Lapsed / Inactive Customers**: Automated win-back campaign with £10 gift voucher; 1-question exit survey; suppress ad spend after 3 unresponsive attempts.
 
 ---
 
@@ -197,7 +197,7 @@ capstone_2_onlineretail/
 ├── notebooks/
 │   └── 01_retail_customer_segmentation.ipynb    # Master executable notebook (10 sections, deepmind kernel)
 ├── reports/
-│   ├── Online_Retail_Customer_Segmentation_Report.pdf  # Formal 28-page publication PDF (Draft.pdf format)
+│   ├── Online_Retail_Customer_Segmentation_Report.pdf  # Formal 27-page PDF report (Draft.pdf format)
 │   ├── Retail_Customer_Segmentation_Report.docx        # Editable Microsoft Word document with embedded plots
 │   └── report_retail_customer_segmentation.md          # Master source markdown report with LaTeX math
 ├── models/
@@ -227,29 +227,30 @@ capstone_2_onlineretail/
 
 ---
 
-## 💻 Python Environment & Reproducibility
+## 💻 Python Environment, Reproducibility & Automated Testing
 
+### Environment Setup
 - **Python Version**: `3.11.15`
-- **Conda Environment**: `DL_AI_env_311`
-- **Interpreter Path**: `C:\Users\amans\anaconda3\envs\DL_AI_env_311\python.exe`
+- **Conda Environment**: `DL_AI_env_311` (or create via [`environment.yml`](./environment.yml))
 - **Jupyter Kernel**: `deepmind` (`DeepMind (Python 3.11.15)`)
-- **Core Dependencies**: `numpy`, `pandas`, `scipy`, `scikit-learn`, `statsmodels`, `prophet`, `xgboost`, `matplotlib`, `seaborn`, `joblib`, `pandoc`
+- **Dependency Specifications**: Pinned via [`environment.yml`](./environment.yml) and [`requirements.txt`](./requirements.txt)
 
-To replicate the execution of both Capstone pipelines:
+To set up a clean reproducible environment:
 ```powershell
-# Activate conda environment
+# Option A: Create fresh conda environment
+conda env create -f environment.yml
 conda activate DL_AI_env_311
 
-# --- Capstone 1 (Walmart) ---
-python .agent/tools/build_walmart_nb.py
-python .agent/tools/generate_walmart_report_md.py
+# Option B: Install via pip
+pip install -r requirements.txt
+```
 
-# --- Capstone 2 (Online Retail) ---
-python .agent/tools/build_retail_nb.py
-python .agent/tools/generate_retail_report_md.py
-python .agent/tools/compile_retail_report.py
+### Automated Unit & Regression Tests
+The repository includes an automated regression test suite built on Python's native `unittest` framework (zero extra testing dependencies required):
+- `tests/test_walmart_pipeline.py`: Verifies strict chronological split ordering (no overlap), absence of rolling window boundary leakage across stores, forecast output dimensions (540 rows across 45 stores), and validity of 90% prediction intervals.
+- `tests/test_retail_pipeline.py`: Verifies gross revenue conservation (£8,887,208.89), RFM domain constraints ($R \ge 0, F \ge 1, M > 0$), 4-cluster completeness, and persona profile monotonicity.
 
-# --- Global Validation Linters ---
-python .agent/tools/lint_notebook.py
-python .agent/tools/validate_naming.py
+Execute all automated tests via:
+```powershell
+python -m unittest discover tests
 ```
