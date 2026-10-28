@@ -43,18 +43,19 @@ A national retail chain operating **45 superstores** across heterogeneous geogra
 
 ### Model Evaluation & Out-of-Sample Benchmark
 
-Models were validated using a 3-fold date-grouped expanding chronological panel cross-validation across all 45 stores cross-validation scheme to strictly prevent future data leakage. Out-of-sample performance was benchmarked on the final 12-week holdout test partition (540 observations across 45 stores):
+Candidate models were validated and selected using a 3-fold date-grouped expanding chronological panel cross-validation scheme across all 45 stores to strictly prevent future data leakage. Hyperparameters were tuned on cross-validation only (Candidate 3 Depth 7 selected as Champion: CV Mean RMSE $78,917.02 \pm $19,502.68, CV Mean WAPE 4.74% \pm 1.07%). Out-of-sample performance was evaluated once on the final 12-week holdout test partition (540 observations across 45 stores):
 
 | Model Architecture | Scope | Out-of-Sample RMSE | Out-of-Sample MAE | Out-of-Sample MAPE | Out-of-Sample WAPE | Validation Status |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
 | **Naive Baseline (Lag 1 Persistence)** | All 45 Stores | \$72,442.05 | \$46,965.55 | 4.71% | 4.57% | Lower Bound Benchmark |
 | **Random Forest Regressor (150 Trees)** | All 45 Stores | \$56,656.71 | \$38,418.35 | 3.78% | 3.74% | Ensemble Bagging |
-| 🏆 **Tuned Champion XGBoost** | **All 45 Stores** | **\$49,171.19** | **\$34,414.52** | **3.40%** | **3.35%** | **Promoted Champion** |
+| 🏆 **Tuned Champion XGBoost** | **All 45 Stores** | **\$49,140.51** | **\$33,619.68** | **3.40%** | **3.27%** | **Promoted Champion** |
 | **Facebook Prophet (Bayesian GAM)** | Sample Tiers (20, 1, 33) | \$86,284.53 | \$66,089.59 | 5.36% | 5.10% | Additive Decomposition |
 | **Statistical SARIMAX (1,1,1)x(0,1,1)₁₂** | Sample Tiers (20, 1, 33) | \$104,025.64 | \$73,133.91 | 5.94% | 5.64% | Stochastic Regressor |
 | 🏆 **Tuned XGBoost** | **Sample Tiers (20, 1, 33)** | **\$51,860.80** | **\$39,052.79** | **3.44%** | **3.01%** | **Promoted Champion** |
 
-> **Business Impact**: The tuned champion XGBoost model reduces national forecast dollar error by **>26.7%** relative to the naive persistence model, achieving an unprecedented **3.35% WAPE** across all 45 outlets.
+> **Business Impact**: The tuned champion XGBoost model reduces national forecast dollar error by **>28% (specifically 32.17%)** relative to the naive persistence model, achieving an unprecedented **3.27% WAPE** across all 45 outlets.
+> **Calibrated Uncertainty**: 90% prediction intervals calibrated strictly on training CV out-of-fold residuals achieved **91.30% empirical coverage** across the 540 holdout test observations with an average width of **$150,396.66**.
 
 ---
 
@@ -67,6 +68,9 @@ $$\text{Safety Stock} = Z_{\alpha} \times \text{RMSE}_{\text{store}} \times \sqr
 - **Tier 1 Stores (Stores 4, 14, 20)**: Baseline safety stock buffer of **\$127,900**, scaling to **\$450,000–\$600,000** in Q4 to prevent stockouts during double-digit holiday demand spikes.
 - **Tier 3 Stores (Stores 33, 44)**: Lean safety stock buffer of **\$41,800**, supporting weekly cross-docking without holding cost inflation.
 - **Post-Holiday De-escalation**: Procurement orders must be tapered starting **December 10** to manage the sharp 60% post-holiday demand contraction in January and avoid Q1 dead stock.
+
+> **Methodological Qualification**: The dollar-based safety stock formula ($Z_{\alpha} \times \text{RMSE}_{\text{store}} \times \sqrt{L}$) provides an illustrative strategic framework for capital allocation. Operational warehouse deployment requires granular SKU-level physical unit demand, stochastic lead-time variance, and discrete-event inventory simulation.
+> **Baseline Macro Persistence Scenario**: The 12-week forward projections assume frozen macroeconomic indicators (`CPI`, `Unemployment`, `Fuel_Price`) and seasonal temperatures at their final observed values as a baseline demand planning scenario.
 
 ---
 
@@ -160,11 +164,13 @@ Algorithms were systematically evaluated across $k \in [2, 6]$ using Within-Clus
 | **K-Means** | $k=5$ | 3,296.71 | 0.3162 | 0.9878 | Diminishing returns; over-fragments regular repeaters |
 | **K-Means** | $k=6$ | 2,855.76 | 0.3124 | 1.0210 | High complexity; increases campaign management overhead |
 | **Agglomerative (Ward Linkage)** | $k=4$ | — | 0.2800 | 1.0992 | Confirms 4-branch dendrogram topology; lower silhouette |
-| **DBSCAN ($\epsilon=0.75$, $MinPts=10$)** | 1 + Noise | — | 0.0000 | 0.0000 | Fails density test (lumps 4,303 into 1 cluster; 35 noise points) |
+| **DBSCAN ($\epsilon=0.75$, $MinPts=10$)** | 1 + Noise | — | N/A (Degenerate) | N/A (Degenerate) | Fails density test (lumps 4,303 into 1 cluster; 35 noise points) |
 
 ---
 
 ### Discovered Customer Personas & The Pareto Principle
+
+> **Dimensionality & Cluster Stability**: PCA is utilized as an orthogonal 2D visual communication tool retaining 93.87% variance, while K-Means is trained on standardized 3D RFM space. Cluster stability was verified via an exceptional Adjusted Rand Index (ARI) of **0.9668** across random initialization seeds. "Lapsed / Inactive Customers" represents an operational observation-window classification rather than permanent churn.
 
 Applying the champion $k=4$ model to the 4,338 customer base reveals four actionable commercial archetypes:
 

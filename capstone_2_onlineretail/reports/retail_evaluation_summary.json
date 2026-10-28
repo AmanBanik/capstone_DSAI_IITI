@@ -1,0 +1,90 @@
+{
+  "project": "Capstone 2: Online Retail Customer Segmentation",
+  "data_hygiene_lineage": {
+    "raw_transactions": 541909,
+    "missing_customer_ids": 135080,
+    "duplicates_removed": 5268,
+    "cancellations_isolated": 9288,
+    "zero_unit_price_pruned": 40,
+    "clean_commercial_transactions": 392692,
+    "unique_commercial_customers": 4338,
+    "gross_enterprise_revenue_gbp": 8887208.89
+  },
+  "pca_variance_decomposition": {
+    "pc1_explained_variance_pct": 75.08,
+    "pc2_explained_variance_pct": 18.79,
+    "cumulative_explained_variance_pct": 93.87,
+    "role": "2D visualization aid; clustering performed on standardized 3D RFM space"
+  },
+  "clustering_diagnostics": {
+    "champion_algorithm": "K-Means (k=4, k-means++, n_init=15)",
+    "inertia_wcss": 3939.05,
+    "silhouette_score": 0.3375,
+    "davies_bouldin_index": 1.0086,
+    "mean_stability_ari": 0.9668
+  },
+  "persona_profiles": [
+    {
+      "Persona": "Champions (Whales)",
+      "Customer_Count": 709,
+      "Mean_Recency": 12.081805359661494,
+      "Median_Recency": 8.0,
+      "Mean_Frequency": 13.792665726375176,
+      "Median_Frequency": 10.0,
+      "Mean_Monetary": 8112.926755994358,
+      "Median_Monetary": 3722.82,
+      "Mean_AOV": 623.8268094873819,
+      "Total_Revenue": 5752065.07,
+      "Revenue_Share_%": 64.72296464060136,
+      "Customer_Share_%": 16.343937298294144
+    },
+    {
+      "Persona": "Loyal Active Repeaters",
+      "Customer_Count": 1173,
+      "Mean_Recency": 70.13213981244672,
+      "Median_Recency": 55.0,
+      "Mean_Frequency": 4.112531969309463,
+      "Median_Frequency": 4.0,
+      "Mean_Monetary": 1804.8167289002558,
+      "Median_Monetary": 1341.65,
+      "Mean_AOV": 571.2678687657896,
+      "Total_Revenue": 2117050.023,
+      "Revenue_Share_%": 23.821314973582748,
+      "Customer_Share_%": 27.040110650069156
+    },
+    {
+      "Persona": "Promising Recent Shoppers",
+      "Customer_Count": 839,
+      "Mean_Recency": 18.206197854588797,
+      "Median_Recency": 17.0,
+      "Mean_Frequency": 2.1406436233611443,
+      "Median_Frequency": 2.0,
+      "Mean_Monetary": 543.0566865315852,
+      "Median_Monetary": 466.7,
+      "Mean_AOV": 278.3418189454566,
+      "Total_Revenue": 455624.56,
+      "Revenue_Share_%": 5.126745251904731,
+      "Customer_Share_%": 19.340710004610422
+    },
+    {
+      "Persona": "Lapsed / Inactive Customers",
+      "Customer_Count": 1617,
+      "Mean_Recency": 182.6326530612245,
+      "Median_Recency": 177.0,
+      "Mean_Frequency": 1.3191094619666048,
+      "Median_Frequency": 1.0,
+      "Mean_Monetary": 347.8473970315399,
+      "Median_Monetary": 298.4,
+      "Mean_AOV": 288.0816288394145,
+      "Total_Revenue": 562469.241,
+      "Revenue_Share_%": 6.328975133911148,
+      "Customer_Share_%": 37.27524204702628
+    }
+  ],
+  "pareto_proof": {
+    "power_tier_headcount": 1882,
+    "power_tier_headcount_share_pct": 43.38,
+    "power_tier_revenue_gbp": 7869115.09,
+    "power_tier_revenue_share_pct": 88.54
+  }
+}

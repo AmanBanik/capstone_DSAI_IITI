@@ -64,7 +64,5 @@ $RECYCLE.BIN/
 *.log
 tmp/
 temp/
-image*.png
-Capstone_Judge_Report.pdf
 
 

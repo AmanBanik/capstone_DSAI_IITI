@@ -1,0 +1,105 @@
+{
+  "project": "Capstone 1: Walmart Store Sales Demand Forecasting",
+  "validation_protocol": "3-fold date-grouped expanding chronological window CV across all 45 stores simultaneously",
+  "champion_selection": "Selected solely via cross-validation (Candidate 3: Depth 7, LR 0.04, N 300)",
+  "cross_validation_candidates": [
+    {
+      "Model Configuration": "Initial Baseline",
+      "CV Mean RMSE ($)": 78535.39,
+      "CV Std RMSE ($)": 17408.33,
+      "CV Mean MAE ($)": 50609.52,
+      "CV Std MAE ($)": 11858.35,
+      "CV Mean WAPE (%)": 4.7,
+      "CV Std WAPE (%)": 0.97,
+      "Selection Decision": "Rejected"
+    },
+    {
+      "Model Configuration": "Candidate 1 (Shallow: Depth 5)",
+      "CV Mean RMSE ($)": 78610.88,
+      "CV Std RMSE ($)": 17454.07,
+      "CV Mean MAE ($)": 51093.95,
+      "CV Std MAE ($)": 11987.07,
+      "CV Mean WAPE (%)": 4.75,
+      "CV Std WAPE (%)": 0.98,
+      "Selection Decision": "Rejected"
+    },
+    {
+      "Model Configuration": "Candidate 2 (Deep: Depth 8)",
+      "CV Mean RMSE ($)": 78450.04,
+      "CV Std RMSE ($)": 19046.3,
+      "CV Mean MAE ($)": 50766.65,
+      "CV Std MAE ($)": 13421.82,
+      "CV Mean WAPE (%)": 4.71,
+      "CV Std WAPE (%)": 1.1,
+      "Selection Decision": "Rejected"
+    },
+    {
+      "Model Configuration": "Candidate 3 (Tuned Optimal: Depth 7)",
+      "CV Mean RMSE ($)": 78917.02,
+      "CV Std RMSE ($)": 19502.68,
+      "CV Mean MAE ($)": 50991.93,
+      "CV Std MAE ($)": 13056.76,
+      "CV Mean WAPE (%)": 4.74,
+      "CV Std WAPE (%)": 1.07,
+      "Selection Decision": "Selected Champion"
+    }
+  ],
+  "champion_holdout_test_metrics": {
+    "model": "Tuned Champion XGBoost (All 45 Stores)",
+    "rmse": 49140.51,
+    "mae": 33619.68,
+    "mape": 3.4,
+    "wape": 3.27,
+    "error_reduction_vs_naive_pct": 32.17
+  },
+  "interval_calibration": {
+    "10th Percentile OOF Error ($)": -79132.48,
+    "90th Percentile OOF Error ($)": 71264.18,
+    "Holdout 90% Empirical Coverage (%)": 91.3,
+    "Holdout Average Interval Width ($)": 150396.66
+  },
+  "model_comparison_benchmark": [
+    {
+      "Model Architecture": "Naive Baseline (Lag 1)",
+      "RMSE ($)": 72442.05,
+      "MAE ($)": 46965.55,
+      "MAPE (%)": 4.71,
+      "WAPE (%)": 4.57
+    },
+    {
+      "Model Architecture": "Random Forest Regressor",
+      "RMSE ($)": 56656.71,
+      "MAE ($)": 38418.35,
+      "MAPE (%)": 3.78,
+      "WAPE (%)": 3.74
+    },
+    {
+      "Model Architecture": "Tuned Champion XGBoost (All 45 Stores)",
+      "RMSE ($)": 49140.51,
+      "MAE ($)": 33619.68,
+      "MAPE (%)": 3.4,
+      "WAPE (%)": 3.27
+    },
+    {
+      "Model Architecture": "SARIMAX (Sample Stores)",
+      "RMSE ($)": 104025.64,
+      "MAE ($)": 73133.91,
+      "MAPE (%)": 5.94,
+      "WAPE (%)": 5.64
+    },
+    {
+      "Model Architecture": "Facebook Prophet (Sample Stores)",
+      "RMSE ($)": 86284.53,
+      "MAE ($)": 66089.59,
+      "MAPE (%)": 5.36,
+      "WAPE (%)": 5.1
+    },
+    {
+      "Model Architecture": "Tuned XGBoost (Sample Stores)",
+      "RMSE ($)": 51860.8,
+      "MAE ($)": 39052.79,
+      "MAPE (%)": 3.44,
+      "WAPE (%)": 3.01
+    }
+  ]
+}
