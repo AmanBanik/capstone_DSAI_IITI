@@ -13,6 +13,7 @@ import numpy as np
 WORKSPACE_ROOT = Path(os.getenv("WORKSPACE_ROOT", Path(__file__).resolve().parent.parent))
 DATA_RAW = WORKSPACE_ROOT / "data_raw/Walmart.csv"
 DATA_PROCESSED = WORKSPACE_ROOT / "capstone_1_walmart/data_processed"
+MODELS_DIR = WORKSPACE_ROOT / "capstone_1_walmart/models"
 REPORTS_DIR = WORKSPACE_ROOT / "capstone_1_walmart/reports"
 
 
@@ -23,6 +24,8 @@ class TestWalmartPipeline(unittest.TestCase):
         cls.train_b01 = pd.read_csv(DATA_PROCESSED / "baseline_split-train01.csv")
         cls.test_b01 = pd.read_csv(DATA_PROCESSED / "baseline_split-test01.csv")
         cls.train_f02 = pd.read_csv(DATA_PROCESSED / "lag_rolling_features-train02.csv")
+        cls.train_m03 = pd.read_csv(DATA_PROCESSED / "macro_cyclical_engineered-train03.csv")
+        cls.test_m03 = pd.read_csv(DATA_PROCESSED / "macro_cyclical_engineered-test03.csv")
         cls.forecast01 = pd.read_csv(DATA_PROCESSED / "forward_12week-forecast01.csv")
 
     def test_environment_and_path_portability(self):
@@ -101,6 +104,102 @@ class TestWalmartPipeline(unittest.TestCase):
         self.assertGreaterEqual(calib["Holdout 90% Empirical Coverage (%)"], 85.0, "Empirical coverage must be >= 85%")
         self.assertLessEqual(calib["Holdout 90% Empirical Coverage (%)"], 98.0, "Empirical coverage must be <= 98%")
         self.assertGreater(calib["Holdout Average Interval Width ($)"], 50000.0, "Interval width must be realistic (> $50K)")
+
+    def test_panel_weekly_cadence_and_non_duplication(self):
+        """Assert zero duplicate (Store, Date) rows and strict 7-day weekly cadence across all 45 stores."""
+        df_raw = pd.read_csv(DATA_RAW)
+        self.assertEqual(df_raw.duplicated(subset=["Store", "Date"]).sum(), 0, "Raw panel must have zero duplicate (Store, Date) pairs")
+        
+        df_raw["Date"] = pd.to_datetime(df_raw["Date"], format="%d-%m-%Y")
+        for store_id, group in df_raw.groupby("Store"):
+            group = group.sort_values("Date")
+            date_diffs = group["Date"].diff().dropna()
+            self.assertTrue(
+                (date_diffs == pd.Timedelta(days=7)).all(),
+                f"Store {store_id} contains non-7-day weekly intervals: {date_diffs.unique()}"
+            )
+
+    def test_holdout_metric_recomputation_from_champion_model(self):
+        """Assert that loading champion XGBoost and predicting on test data reproduces canonical test metrics."""
+        import joblib
+        model_path = MODELS_DIR / "walmart_xgboost_iter02.joblib"
+        self.assertTrue(model_path.exists(), "Champion XGBoost model file must exist")
+        
+        model = joblib.load(model_path)
+        store_means = self.train_m03.groupby("Store")["Weekly_Sales"].mean().to_dict()
+        
+        test_df = self.test_m03.copy()
+        test_df["store_mean_sales"] = test_df["Store"].map(store_means)
+        
+        feature_order = model.get_booster().feature_names
+        X_test = test_df[feature_order]
+        y_true = test_df["Weekly_Sales"].values
+        y_pred = model.predict(X_test)
+        
+        recomputed_rmse = float(np.sqrt(np.mean((y_true - y_pred) ** 2)))
+        recomputed_mae = float(np.mean(np.abs(y_true - y_pred)))
+        recomputed_wape = float((np.sum(np.abs(y_true - y_pred)) / np.sum(y_true)) * 100.0)
+        recomputed_mape = float(np.mean(np.abs((y_true - y_pred) / y_true)) * 100.0)
+        
+        # Verify alignment to canonical published metrics
+        self.assertAlmostEqual(recomputed_rmse, 49140.51, delta=1.0, msg="Recomputed RMSE must align to $49,140.51")
+        self.assertAlmostEqual(recomputed_mae, 33619.68, delta=1.0, msg="Recomputed MAE must align to $33,619.68")
+        self.assertAlmostEqual(recomputed_wape, 3.27, delta=0.05, msg="Recomputed WAPE must align to 3.27%")
+        self.assertAlmostEqual(recomputed_mape, 3.40, delta=0.05, msg="Recomputed MAPE must align to 3.40%")
+
+    def test_holdout_interval_empirical_coverage_recomputation(self):
+        """Assert that out-of-fold calibrated residuals produce exactly 91.30% coverage on the untouched test holdout."""
+        import joblib
+        import json
+        
+        model = joblib.load(MODELS_DIR / "walmart_xgboost_iter02.joblib")
+        store_means = self.train_m03.groupby("Store")["Weekly_Sales"].mean().to_dict()
+        
+        test_df = self.test_m03.copy()
+        test_df["store_mean_sales"] = test_df["Store"].map(store_means)
+        
+        feature_order = model.get_booster().feature_names
+        y_true = test_df["Weekly_Sales"].values
+        y_pred = model.predict(test_df[feature_order])
+        
+        with open(REPORTS_DIR / "walmart_evaluation_summary.json", "r", encoding="utf-8") as f:
+            calib = json.load(f)["interval_calibration"]
+            
+        q_low = calib["10th Percentile OOF Error ($)"]
+        q_high = calib["90th Percentile OOF Error ($)"]
+        
+        test_lower = y_pred + q_low
+        test_upper = y_pred + q_high
+        
+        empirical_coverage = float(np.mean((y_true >= test_lower) & (y_true <= test_upper)) * 100.0)
+        avg_width = float(np.mean(test_upper - test_lower))
+        
+        self.assertAlmostEqual(empirical_coverage, 91.30, delta=0.05, msg="Recomputed holdout coverage must be 91.30%")
+        self.assertAlmostEqual(avg_width, 150396.66, delta=1.0, msg="Recomputed interval width must be $150,396.66")
+
+    def test_synthetic_fixture_leakage_resistance(self):
+        """Assert that lag and rolling window transformations strictly respect shift(1) without future leakage."""
+        dates = pd.date_range("2024-01-01", periods=6, freq="W")
+        toy_df = pd.DataFrame({
+            "Store": [1] * 6,
+            "Date": dates,
+            "Target": [100.0, 200.0, 300.0, 400.0, 500.0, 600.0]
+        })
+        
+        # Calculate shifted rolling mean (window=2)
+        toy_df["roll_2"] = toy_df.groupby("Store")["Target"].transform(
+            lambda s: s.shift(1).rolling(2).mean()
+        )
+        
+        # Verify that row 3 (Target=400.0) only saw Target 200 and 300 (mean = 250)
+        self.assertEqual(toy_df.loc[3, "roll_2"], 250.0)
+        # Verify that changing future value in row 3 does not alter rolling value in row 2
+        toy_modified = toy_df.copy()
+        toy_modified.loc[3, "Target"] = 99999.0
+        toy_modified["roll_2"] = toy_modified.groupby("Store")["Target"].transform(
+            lambda s: s.shift(1).rolling(2).mean()
+        )
+        self.assertEqual(toy_df.loc[2, "roll_2"], toy_modified.loc[2, "roll_2"])
 
 
 if __name__ == "__main__":

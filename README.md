@@ -1,5 +1,7 @@
 # Data Science & AI Capstone Projects
 
+[![Capstone CI](https://github.com/AmanBanik/capstone_DSAI_IITI/actions/workflows/ci.yml/badge.svg)](https://github.com/AmanBanik/capstone_DSAI_IITI/actions/workflows/ci.yml)
+
 This repository hosts two industrial-grade Data Science & AI Capstone projects developed under the **DSAI** specialization:
 
 1. **Capstone 1: Walmart Store Sales Demand Forecasting & Outlets Inventory Optimization** (Status: **Completed & Verified** ✅)
@@ -251,12 +253,26 @@ conda activate DL_AI_env_311
 pip install -r requirements.txt
 ```
 
-### Automated Unit & Regression Tests
-The repository includes an automated regression test suite built on Python's native `unittest` framework (zero extra testing dependencies required):
-- `tests/test_walmart_pipeline.py`: Verifies strict chronological split ordering (no overlap), absence of rolling window boundary leakage across stores, forecast output dimensions (540 rows across 45 stores), and validity of 90% prediction intervals.
-- `tests/test_retail_pipeline.py`: Verifies gross revenue conservation (£8,887,208.89), RFM domain constraints ($R \ge 0, F \ge 1, M > 0$), 4-cluster completeness, and persona profile monotonicity.
+### Continuous Integration (GitHub Actions)
+The repository is continuously verified on every push and pull request to `main` via a dedicated GitHub Actions workflow ([`.github/workflows/ci.yml`](./.github/workflows/ci.yml)):
+- **Runner**: `ubuntu-latest` running **Python 3.11**.
+- **Lean Dependency Set**: Fast test execution using [`requirements-ci.txt`](./requirements-ci.txt) containing only test dependencies (`pytest`, `nbformat`, `numpy`, `pandas`, `scikit-learn`, `joblib`, `xgboost`).
+- **Dependency Health**: Validates dependency compatibility with `python -m pip check`.
+- **Notebook Schema Validation**: Rigorously validates all Jupyter notebooks (`.ipynb`) against the v4 notebook schema using `nbformat`.
+- **Automated Regression Invariants**: Executes the comprehensive 18-point test suite using `pytest`.
 
-Execute all automated tests via:
+> **CI Scope Disclosure**: The automated CI workflow executes the fast unit/regression validation suite against serialized models and processed artifacts. Full model retraining and Bayesian time-series estimation (e.g., Facebook Prophet) are maintained on interactive/manual schedules due to computational constraints.
+
+### Automated Unit & Regression Tests
+The repository includes an automated regression test suite compatible with both `pytest` and Python's native `unittest` framework:
+- `tests/test_walmart_pipeline.py`: Verifies strict chronological split ordering (no overlap), store boundary isolation without future rolling leakage (`shift(1)`), 7-day cadence and non-duplication across all 45 stores, direct mathematical recomputation of holdout metrics (RMSE \$49,140.51, MAE \$33,619.68, WAPE 3.27%) from model predictions, empirical interval coverage (91.30%), and forecast dimensions (540 store-week predictions).
+- `tests/test_retail_pipeline.py`: Verifies gross revenue conservation (£8,887,208.89), RFM domain constraints ($R \ge 0, F \ge 1, M > 0$), 4-cluster completeness, multidimensional persona profile monotonicity, 100% model reloading reproducibility, PCA variance preservation (93.87% across 2 components), and topological cluster stability across random seeds (Mean ARI $\ge 0.90$).
+
+Execute all automated tests locally via:
 ```powershell
-python -m unittest discover tests
+# Option A: Standard library unittest (zero extra dependencies)
+python -m unittest discover -v tests
+
+# Option B: Pytest (verbose output)
+python -m pytest -v tests/
 ```

@@ -141,6 +141,18 @@ class TestRetailPipeline(unittest.TestCase):
         self.assertAlmostEqual(pareto["power_tier_revenue_share_pct"], 88.54, places=1)
         self.assertAlmostEqual(pareto["power_tier_headcount_share_pct"], 43.38, places=1)
 
+    def test_pca_artifact_and_variance_decomposition(self):
+        """Assert that PCA transformer is valid and preserves 93.87% cumulative explained variance across 2 components."""
+        pca_path = MODELS_DIR / "retail_pca_iter01.joblib"
+        self.assertTrue(pca_path.exists(), "retail_pca_iter01.joblib must exist")
+        pca = joblib.load(pca_path)
+        self.assertEqual(pca.n_components, 2, "PCA must preserve exactly 2 principal components for visualization")
+        
+        cum_var = float(np.sum(pca.explained_variance_ratio_) * 100.0)
+        self.assertAlmostEqual(cum_var, 93.87, delta=0.05, msg="PCA cumulative variance must equal 93.87%")
+        self.assertAlmostEqual(float(pca.explained_variance_ratio_[0] * 100.0), 75.08, delta=0.05)
+        self.assertAlmostEqual(float(pca.explained_variance_ratio_[1] * 100.0), 18.79, delta=0.05)
+
 
 if __name__ == "__main__":
     unittest.main()
